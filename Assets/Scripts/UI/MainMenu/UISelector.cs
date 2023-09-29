@@ -12,7 +12,7 @@ namespace Production.UI
         public int selectedValue = -1;
         private SelectorButton[] variantButtons;
 
-        private void Start()
+        private void Awake()
         {
             variantButtons = GetComponentsInChildren<SelectorButton>();
             if (variantButtons.Length == 0)

@@ -11,13 +11,21 @@ namespace Production.UI
     {
         public int associatedValue;
         private Button associatedButton;
+        private Button AssociatedButton
+        {
+            get
+            {
+                if (associatedButton == null)
+                    associatedButton = GetComponent<Button>();
+                return associatedButton;
+            }
+        }
 
         public UnityEvent<int> OnSelectedValueChanged;
 
         private void Awake()
         {
-            associatedButton = GetComponent<Button>();
-            associatedButton.onClick.AddListener(OnButtonSelected);
+            AssociatedButton.onClick.AddListener(OnButtonSelected);
         }
 
         private void OnButtonSelected()
@@ -28,7 +36,7 @@ namespace Production.UI
         // выбранная кнопка выделяется красным цветом; невыбранные кнопки белые
         public void SetHighlight(bool isHighlight)
         {
-            var colors = associatedButton.colors;
+            var colors = AssociatedButton.colors;
 
             if (isHighlight)
             {
@@ -41,7 +49,7 @@ namespace Production.UI
                 colors.selectedColor = Color.white;
             }
 
-            associatedButton.colors = colors;
+            AssociatedButton.colors = colors;
         }
     }
 }
