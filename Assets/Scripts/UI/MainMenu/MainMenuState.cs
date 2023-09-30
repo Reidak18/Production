@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,14 +12,14 @@ namespace Production.UI
         [SerializeField]
         private MainMenuStateView view;
 
-        private UnityAction<int> onStartGameCallback;
+        private Action<int> onStartGameCallback;
 
         private void Awake()
         {
-            view.OnStartClicked.AddListener(OnStartClicked);
+            view.OnStartClicked += OnStartClicked;
         }
 
-        public void Init(UnityAction<int> onStartGameCallback)
+        public void Init(Action<int> onStartGameCallback)
         {
             this.onStartGameCallback = onStartGameCallback;
         }

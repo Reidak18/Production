@@ -23,7 +23,7 @@ namespace Production.UI
 
             foreach(var variantButton in variantButtons)
             {
-                variantButton.OnSelectedValueChanged.AddListener(OnSelectedValueChanged);
+                variantButton.OnSelectedValueChanged += OnSelectedValueChanged;
             }
 
             selectedValue = variantButtons[0].associatedValue;

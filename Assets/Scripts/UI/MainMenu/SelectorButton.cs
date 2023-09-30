@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,7 +22,7 @@ namespace Production.UI
             }
         }
 
-        public UnityEvent<int> OnSelectedValueChanged;
+        public event Action<int> OnSelectedValueChanged;
 
         private void Awake()
         {

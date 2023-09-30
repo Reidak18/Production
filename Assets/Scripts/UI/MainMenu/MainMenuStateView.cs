@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,7 +14,7 @@ namespace Production.UI
         [SerializeField]
         private Button startButton;
 
-        public UnityEvent OnStartClicked;
+        public event Action OnStartClicked;
 
         private void Awake()
         {
