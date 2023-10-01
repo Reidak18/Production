@@ -14,6 +14,8 @@ namespace Production.UI
         private Transform resourceParent;
         [SerializeField]
         private Transform productParent;
+        [SerializeField]
+        private Text CoinsCountText;
 
         private Dictionary<string, LootUI> lootsDict = new Dictionary<string, LootUI>();
 
@@ -49,6 +51,11 @@ namespace Production.UI
                 else
                     lootsDict[lootId].SetQuantity(0);
             }
+        }
+
+        public void UpdateCoinsCount(int coinsCount)
+        {
+            CoinsCountText.text = coinsCount.ToString();
         }
     }
 }

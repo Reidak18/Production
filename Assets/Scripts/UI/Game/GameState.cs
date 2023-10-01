@@ -24,5 +24,10 @@ namespace Production.UI
         {
             view.ReloadAllQuantity(loots);
         }
+
+        public void UpdateCoinsCount(int coinsCount)
+        {
+            view.UpdateCoinsCount(coinsCount);
+        }
     }
 }

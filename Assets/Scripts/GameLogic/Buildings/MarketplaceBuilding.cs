@@ -15,10 +15,5 @@ namespace Production.GameLogic
             base.Init(description, coords);
             type = BuildingType.Marketplace;
         }
-
-        public void SetProduct(Product product)
-        {
-            this.product = product;
-        }
     }
 }

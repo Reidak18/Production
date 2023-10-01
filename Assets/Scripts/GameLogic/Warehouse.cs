@@ -7,7 +7,7 @@ namespace Production.GameLogic
 {
     public class Warehouse
     {
-        public Dictionary<string, int> loots = new Dictionary<string, int>();
+        private Dictionary<string, int> loots = new Dictionary<string, int>();
 
         public event Action<string, int> OnWarehouseContentChanged;
         public event Action<Dictionary<string, int>> OnWarehouseContentLoaded;
@@ -34,6 +34,19 @@ namespace Production.GameLogic
             {
                 PlayerPrefs.SetInt(lootId, loots[lootId]);
             }
+        }
+
+        public bool GetFromWarehouse(string lootId, int required)
+        {
+            if (!loots.TryGetValue(lootId, out int quantity))
+                return false;
+
+            if (quantity < required)
+                return false;
+
+            loots[lootId] -= required;
+            OnWarehouseContentChanged?.Invoke(lootId, loots[lootId]);
+            return true;
         }
 
         public bool GetFromWarehouse(Dictionary<string, int> required)
@@ -67,6 +80,14 @@ namespace Production.GameLogic
                 loots[lootId] += quantity;
             }
             OnWarehouseContentChanged?.Invoke(lootId, loots[lootId]);
+        }
+
+        public int GetQuantityOf(string lootId)
+        {
+            if (loots.ContainsKey(lootId))
+                return loots[lootId];
+
+            return 0;
         }
     }
 }

@@ -20,10 +20,7 @@ namespace Production.UI
 
             // отключаем все стейты
             foreach (var state in allStates)
-            {
-                state.stateSwitcher = this;
                 state.HideImmediately();
-            }
 
             // устанавливаем текущий стейт
             currentState = defaultState;

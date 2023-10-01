@@ -22,7 +22,7 @@ namespace Production.GameLogic
     [Serializable]
     public class Product: Loot
     {
-        public int cost;
+        public int price;
     }
 
     [CreateAssetMenu(fileName = "LootDescriptions", menuName = "Loot descriptions")]

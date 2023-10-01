@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -33,6 +34,7 @@ namespace Production.GameLogic
         public event Action<Building> OnBuildingClicked;
         public event Action<string, int> OnWarehouseContentChanged;
         public event Action<Dictionary<string, int>> OnWarehouseContentLoaded;
+        public event Action<int> OnCoinsCountChanged;
 
         private void Awake()
         {
@@ -51,7 +53,7 @@ namespace Production.GameLogic
             warehouse.Load(lootDescriptions);
             LoadCoins();
 
-            productionController.StartGame(warehouse.GetFromWarehouse, warehouse.AddToWarehouse);
+            productionController.StartGame(GetFromWarehouse, warehouse.AddToWarehouse);
         }
 
         public LootDescriptions GetLootDescriptions()
@@ -62,6 +64,28 @@ namespace Production.GameLogic
         public Convertations GetConvertations()
         {
             return convertationList;
+        }
+
+        public int GetWarehouseQuantity(string productId)
+        {
+            return warehouse.GetQuantityOf(productId);
+        }
+
+        public bool GetFromWarehouse(string productId, int quantity)
+        {
+            return warehouse.GetFromWarehouse(productId, quantity);
+        }
+
+        public bool GetFromWarehouse(Dictionary<string, int> required)
+        {
+            return warehouse.GetFromWarehouse(required);
+        }
+
+        public void SellProduct(string productId, int quantity)
+        {
+            GetFromWarehouse(productId, quantity);
+            coinsCount += lootDescriptions.productsList.FirstOrDefault(p => p.id == productId).price * quantity;
+            OnCoinsCountChanged?.Invoke(coinsCount);
         }
 
         private void OnApplicationFocus(bool focus)
@@ -91,6 +115,7 @@ namespace Production.GameLogic
         private void LoadCoins()
         {
             coinsCount = PlayerPrefs.GetInt(coinsCountKey, 0);
+            OnCoinsCountChanged?.Invoke(coinsCount);
         }
 
         private void SaveCoins()

@@ -7,9 +7,6 @@ namespace Production.UI
 {
     public class State : MonoBehaviour
     {
-        [HideInInspector]
-        public UIStateSwitcherManager stateSwitcher;
-
         public virtual void OnStatePreShown()
         {
             gameObject.SetActive(true);
