@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.EventSystems;
 
 namespace Production.GameLogic
 {
@@ -24,12 +25,13 @@ namespace Production.GameLogic
                 if (buildingsTilemap.HasTile(localPlace))
                 {
                     TileBase tile = buildingsTilemap.GetTile(localPlace);
+                    Vector3Int coords = new Vector3Int(pos.x, pos.y, pos.z);
                     switch (tile.name)
                     {
                         case "Resource":
                             if (resourceCurrentCount < resourceBuildCount)
                             {
-                                buildings.Add(new Vector3Int(pos.x, pos.y, pos.z), factory.CreateResourceBuilding(resourceCurrentCount));
+                                buildings.Add(coords, factory.CreateResourceBuilding(resourceCurrentCount, coords));
                                 resourceCurrentCount += 1;
                             }
                             else
@@ -38,10 +40,10 @@ namespace Production.GameLogic
                             }
                             break;
                         case "Processing":
-                            buildings.Add(new Vector3Int(pos.x, pos.y, pos.z), factory.CreateProcessingBuilding(0));
+                            buildings.Add(new Vector3Int(pos.x, pos.y, pos.z), factory.CreateProcessingBuilding(0, coords));
                             break;
                         case "Marketplace":
-                            buildings.Add(new Vector3Int(pos.x, pos.y, pos.z), factory.CreateMarketplaceBuilding(0));
+                            buildings.Add(new Vector3Int(pos.x, pos.y, pos.z), factory.CreateMarketplaceBuilding(0, coords));
                             break;
                         default:
                             break;
@@ -56,12 +58,15 @@ namespace Production.GameLogic
         {
             if (Input.GetMouseButtonDown(0))
             {
-                Vector3 clickWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                clickWorldPos.z = 0;
-                Vector3Int clickCellPos = buildingsTilemap.WorldToCell(clickWorldPos);
-                if (buildingsTilemap.HasTile(clickCellPos))
+                if (!EventSystem.current.IsPointerOverGameObject())
                 {
-                    OnBuildingClicked?.Invoke(clickCellPos);
+                    Vector3 clickWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    clickWorldPos.z = 0;
+                    Vector3Int clickCellPos = buildingsTilemap.WorldToCell(clickWorldPos);
+                    if (buildingsTilemap.HasTile(clickCellPos))
+                    {
+                        OnBuildingClicked?.Invoke(clickCellPos);
+                    }
                 }
             }
         }

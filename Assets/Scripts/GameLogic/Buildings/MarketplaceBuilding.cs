@@ -10,20 +10,15 @@ namespace Production.GameLogic
         [HideInInspector]
         public Product product;
 
-        public void Init(BuildingDescription description)
+        public override void Init(BuildingDescription description, Vector3Int coords)
         {
+            base.Init(description, coords);
             type = BuildingType.Marketplace;
-            this.description = description;
         }
 
         public void SetProduct(Product product)
         {
             this.product = product;
-        }
-
-        public override void StartWorking(Func<Dictionary<Loot, int>, bool> getFromProvider, Action<Dictionary<Loot, int>> sendToConsumer)
-        {
-
         }
     }
 }

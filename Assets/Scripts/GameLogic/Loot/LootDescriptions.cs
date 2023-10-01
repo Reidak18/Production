@@ -10,7 +10,7 @@ namespace Production.GameLogic
     {
         public string id;
         public string readableName;
-        public Texture texture;
+        public Texture2D texture;
     }
 
     [Serializable]
@@ -28,9 +28,7 @@ namespace Production.GameLogic
     [CreateAssetMenu(fileName = "LootDescriptions", menuName = "Loot descriptions")]
     public class LootDescriptions : ScriptableObject
     {
-        [SerializeField]
         public List<Resource> resourcesList;
-        [SerializeField]
         public List<Product> productsList;
     }
 }

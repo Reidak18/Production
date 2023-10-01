@@ -8,12 +8,17 @@ namespace Production.GameLogic
 {
     public class GameSession : MonoBehaviour
     {
+        [SerializeField]
+        private bool clearSavesOnStart;
+
         private const string coinsCountKey = "CoinsCount";
 
         [SerializeField]
         private Grid tilemap;
         [SerializeField]
         private BuildingFactory buildingFactory;
+        [SerializeField]
+        private ProductionController productionController;
         [SerializeField]
         private LootDescriptions lootDescriptions;
 
@@ -23,11 +28,16 @@ namespace Production.GameLogic
 
         private Dictionary<Vector3Int, Building> buildings;
 
-        public event Action<BuildingType> OnBuildingClicked;
+        public event Action<Building> OnBuildingClicked;
+        public event Action<string, int> OnWarehouseContentChanged;
 
         private void Awake()
         {
             warehouse = new Warehouse();
+            warehouse.OnWarehouseContentChanged += (id, quantity) => OnWarehouseContentChanged?.Invoke(id, quantity);
+
+            if (clearSavesOnStart)
+                PlayerPrefs.DeleteAll();
         }
 
         public void StartGame(int resourceBuildCount)
@@ -36,6 +46,13 @@ namespace Production.GameLogic
             buildings = CreateMap(resourceBuildCount);
             warehouse.Load(lootDescriptions);
             LoadCoins();
+
+            productionController.StartGame(warehouse.GetFromWarehouse, warehouse.AddToWarehouse);
+        }
+
+        public LootDescriptions GetLootDescriptions()
+        {
+            return lootDescriptions;
         }
 
         private void OnApplicationFocus(bool focus)
@@ -58,7 +75,7 @@ namespace Production.GameLogic
         {
             if (buildings.TryGetValue(clickCellPos, out Building clickedBuilding))
             {
-                OnBuildingClicked?.Invoke(clickedBuilding.type);
+                OnBuildingClicked?.Invoke(clickedBuilding);
             }
         }
 

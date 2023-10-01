@@ -17,10 +17,10 @@ namespace Production.GameLogic
         [HideInInspector]
         public Product product;
 
-        public void Init(BuildingDescription description)
+        public override void Init(BuildingDescription description, Vector3Int coords)
         {
+            base.Init(description, coords);
             type = BuildingType.Processing;
-            this.description = description;
             isWorking = false;
         }
 
@@ -28,11 +28,6 @@ namespace Production.GameLogic
         {
             this.resource1 = resource1;
             this.resource2 = resource2;
-        }
-
-        public override void StartWorking(Func<Dictionary<Loot, int>, bool> getFromProvider, Action<Dictionary<Loot, int>> sendToConsumer)
-        {
-
         }
     }
 }

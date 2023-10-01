@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,34 +7,63 @@ namespace Production.GameLogic
 {
     public class Warehouse
     {
-        public Dictionary<Resource, int> resources = new Dictionary<Resource, int>();
-        public Dictionary<Product, int> products = new Dictionary<Product, int>();
+        public Dictionary<string, int> loots = new Dictionary<string, int>();
+
+        public event Action<string, int> OnWarehouseContentChanged;
 
         public void Load(LootDescriptions lootDescriptions)
         {
-            resources.Clear();
-            products.Clear();
+            loots.Clear();
 
             foreach (var resource in lootDescriptions.resourcesList)
             {
-                resources.Add(resource, PlayerPrefs.GetInt(resource.id, 0));
+                loots.Add(resource.id, PlayerPrefs.GetInt(resource.id, 0));
             }
             foreach (var product in lootDescriptions.productsList)
             {
-                products.Add(product, PlayerPrefs.GetInt(product.id, 0));
+                loots.Add(product.id, PlayerPrefs.GetInt(product.id, 0));
             }
         }
 
         public void Save()
         {
-            foreach (var resource in resources.Keys)
+            foreach (var lootId in loots.Keys)
             {
-                PlayerPrefs.SetInt(resource.id, resources[resource]);
+                PlayerPrefs.SetInt(lootId, loots[lootId]);
             }
-            foreach (var product in products.Keys)
+        }
+
+        public bool GetFromWarehouse(Dictionary<string, int> required)
+        {
+            foreach(var lootId in required.Keys)
             {
-                PlayerPrefs.SetInt(product.id, products[product]);
+                if (!loots.TryGetValue(lootId, out int quantity))
+                    return false;
+
+                if (quantity < required[lootId])
+                    return false;
             }
+
+            foreach (var lootId in required.Keys)
+            {
+                loots[lootId] -= required[lootId];
+                OnWarehouseContentChanged?.Invoke(lootId, loots[lootId]);
+            }
+
+            return true;
+        }
+
+        public void AddToWarehouse(string lootId, int quantity)
+        {
+            if (!loots.ContainsKey(lootId))
+            {
+                loots.Add(lootId, quantity);
+            }
+            else
+            {
+                loots[lootId] += quantity;
+            }
+            OnWarehouseContentChanged?.Invoke(lootId, loots[lootId]);
         }
     }
 }

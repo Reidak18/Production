@@ -16,29 +16,39 @@ namespace Production.UI
         {
             SwitchToMainMenuState();
             gameSession.OnBuildingClicked += OnBuildingClicked;
+
+            var gameState = stateSwitcher.GetState<GameState>();
+            List<Loot> loots = new List<Loot>(gameSession.GetLootDescriptions().resourcesList);
+            loots.AddRange(gameSession.GetLootDescriptions().productsList);
+            gameState.InitLootUIs(loots);
+            gameSession.OnWarehouseContentChanged += gameState.UpdateWarehouseContent;
         }
 
         public void SwitchToMainMenuState()
         {
             var mainMenuState = stateSwitcher.GetState<MainMenuState>();
-            mainMenuState.Init(SwitchToGameState);
+            mainMenuState.Init(RestartGame);
             stateSwitcher.SwitchState(mainMenuState);
         }
 
-        public void SwitchToGameState(int resourceBuildCount)
+        public void RestartGame(int resourceBuildCount)
         {
             gameSession.StartGame(resourceBuildCount);
+            SwitchToGameState();
+        }
+
+        public void SwitchToGameState()
+        {
             var gameState = stateSwitcher.GetState<GameState>();
-            gameState.Init();
             stateSwitcher.SwitchState(gameState);
         }
 
-        private void OnBuildingClicked(BuildingType type)
+        private void OnBuildingClicked(Building building)
         {
-            switch(type)
+            switch(building.type)
             {
                 case BuildingType.Resource:
-                    Debug.Log("Show resource");
+                    ShowResourceBuilding(building as ResourceBuilding);
                     break;
                 case BuildingType.Processing:
                     Debug.Log("Show processing");
@@ -49,6 +59,13 @@ namespace Production.UI
                 default:
                     break;
             }
+        }
+
+        private void ShowResourceBuilding(ResourceBuilding building)
+        {
+            var resourceState = stateSwitcher.GetState<ResourceState>();
+            resourceState.Init(building, gameSession.GetLootDescriptions().resourcesList, SwitchToGameState);
+            stateSwitcher.SwitchState(resourceState);
         }
     }
 }

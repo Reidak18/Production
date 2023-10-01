@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Production.GameLogic;
 using UnityEngine;
 
 namespace Production.UI
@@ -9,14 +10,14 @@ namespace Production.UI
         [SerializeField]
         private GameStateView view;
 
-        private void Awake()
+        public void InitLootUIs(List<Loot> loots)
         {
-
+            view.InitLootUIs(loots);
         }
 
-        public void Init()
+        public void UpdateWarehouseContent(string lootId, int quantity)
         {
-
+            view.UpdateQuantity(lootId, quantity);
         }
     }
 }

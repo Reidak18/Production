@@ -8,7 +8,7 @@ namespace Production.GameLogic
     [Serializable]
     public class BuildingDescription
     {
-        public int productionTime;
+        public float productionTime;
     }
 
     [CreateAssetMenu(fileName = "BuildingDescriptions", menuName = "Building descriptions")]
