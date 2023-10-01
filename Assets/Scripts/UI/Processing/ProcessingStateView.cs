@@ -6,12 +6,12 @@ using UnityEngine.UI;
 
 namespace Production.UI
 {
-    public class ResourceStateView : MonoBehaviour
+    public class ProcessingStateView : MonoBehaviour
     {
         [SerializeField]
         private string startText = "Старт";
         [SerializeField]
-        private string productTimeFormat = "Выработка единицы ресурса: {0} c";
+        private string productTimeFormat = "Выработка единицы продукта: {0} c";
         [SerializeField]
         private string stopText = "Стоп";
 
@@ -20,9 +20,11 @@ namespace Production.UI
         [SerializeField]
         private Text productTimeText;
         [SerializeField]
-        private Image resourceImage;
+        private Image[] resourceImage;
         [SerializeField]
-        private Button changeButton;
+        private Image productImage;
+        [SerializeField]
+        private Button[] changeButtons;
         [SerializeField]
         private Button startButton;
         [SerializeField]
@@ -30,13 +32,17 @@ namespace Production.UI
         [SerializeField]
         private Button closeButton;
 
-        public event Action OnChangeClicked;
+        public event Action<int> OnChangeClicked;
         public event Action OnStartClicked;
         public event Action OnCloseClicked;
 
         private void Awake()
         {
-            changeButton.onClick.AddListener(OnChangeClicked.Invoke);
+            for (int i = 0; i < changeButtons.Length; i++)
+            {
+                int index = i;
+                changeButtons[index].onClick.AddListener(() => OnChangeClicked.Invoke(index));
+            }
             startButton.onClick.AddListener(OnStartClicked.Invoke);
             closeButton.onClick.AddListener(OnCloseClicked.Invoke);
         }
@@ -46,21 +52,31 @@ namespace Production.UI
             productTimeText.text = string.Format(productTimeFormat, productTime);
         }
 
-        public void SetResourceImage(Texture2D resourceTexture)
+        public void SetResourceImage(int index, Texture2D resourceTexture)
+        {
+            SetImage(resourceImage[index], resourceTexture);
+        }
+
+        public void SetProductImage(Texture2D resourceTexture)
+        {
+            SetImage(productImage, resourceTexture);
+        }
+
+        private void SetImage(Image lootImage, Texture2D resourceTexture)
         {
             if (resourceTexture == null)
             {
-                resourceImage.sprite = null;
-                Color imageColor = resourceImage.color;
+                lootImage.sprite = null;
+                Color imageColor = lootImage.color;
                 imageColor.a = 0;
-                resourceImage.color = imageColor;
+                lootImage.color = imageColor;
             }
             else
             {
-                resourceImage.sprite = Sprite.Create(resourceTexture, new Rect(0.0f, 0.0f, resourceTexture.width, resourceTexture.height), new Vector2(0.5f, 0.5f), 100.0f);
-                Color imageColor = resourceImage.color;
+                lootImage.sprite = Sprite.Create(resourceTexture, new Rect(0.0f, 0.0f, resourceTexture.width, resourceTexture.height), new Vector2(0.5f, 0.5f), 100.0f);
+                Color imageColor = lootImage.color;
                 imageColor.a = 1;
-                resourceImage.color = imageColor;
+                lootImage.color = imageColor;
             }
         }
 

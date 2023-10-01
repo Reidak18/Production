@@ -88,8 +88,8 @@ namespace Production.GameLogic
 
                 Dictionary<string, int> requiredResources = new Dictionary<string, int>()
                 {
-                    { build.resource1.id, 1 },
-                    { build.resource2.id, 2 }
+                    { build.resources[0].id, 1 },
+                    { build.resources[1].id, 1 }
                 };
 
                 if (processingBuildings[build] < 0)

@@ -41,7 +41,7 @@ namespace Production.UI
                 resourceIndex = -1;
                 view.SetResourceImage(null);
             }
-            view.SetStartButtonEnable(resourceIndex != -1);
+            view.SetStartButtonEnable(building.isWorking);
             view.UpdateStartButton(building.isWorking);
         }
 
@@ -50,13 +50,30 @@ namespace Production.UI
             resourceIndex = (resourceIndex + 1) % resourcesList.Count;
             view.SetResourceImage(resourcesList[resourceIndex].texture);
             view.SetStartButtonEnable(true);
+
+            StopWorking();
         }
 
         private void OnStartClicked()
         {
-            building.isWorking = !building.isWorking;
-            view.UpdateStartButton(building.isWorking);
-            building.resource = building.isWorking ? resourcesList[resourceIndex] : null;
+            if (!building.isWorking)
+                StartWorking();
+            else
+                StopWorking();
+        }
+
+        private void StartWorking()
+        {
+            building.isWorking = true;
+            view.UpdateStartButton(true);
+            building.resource = resourcesList[resourceIndex];
+        }
+
+        private void StopWorking()
+        {
+            building.isWorking = false;
+            view.UpdateStartButton(false);
+            building.resource = null;
         }
 
         private void OnCloseClicked()

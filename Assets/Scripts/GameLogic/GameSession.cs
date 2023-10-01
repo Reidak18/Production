@@ -21,6 +21,8 @@ namespace Production.GameLogic
         private ProductionController productionController;
         [SerializeField]
         private LootDescriptions lootDescriptions;
+        [SerializeField]
+        private Convertations convertationList;
 
         private MapController currentMap;
         private Warehouse warehouse;
@@ -30,11 +32,13 @@ namespace Production.GameLogic
 
         public event Action<Building> OnBuildingClicked;
         public event Action<string, int> OnWarehouseContentChanged;
+        public event Action<Dictionary<string, int>> OnWarehouseContentLoaded;
 
         private void Awake()
         {
             warehouse = new Warehouse();
             warehouse.OnWarehouseContentChanged += (id, quantity) => OnWarehouseContentChanged?.Invoke(id, quantity);
+            warehouse.OnWarehouseContentLoaded += (loots) => OnWarehouseContentLoaded?.Invoke(loots);
 
             if (clearSavesOnStart)
                 PlayerPrefs.DeleteAll();
@@ -53,6 +57,11 @@ namespace Production.GameLogic
         public LootDescriptions GetLootDescriptions()
         {
             return lootDescriptions;
+        }
+
+        public Convertations GetConvertations()
+        {
+            return convertationList;
         }
 
         private void OnApplicationFocus(bool focus)

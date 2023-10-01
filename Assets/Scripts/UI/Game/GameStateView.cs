@@ -39,5 +39,16 @@ namespace Production.UI
         {
             lootsDict[lootId].SetQuantity(quantity);
         }
+
+        public void ReloadAllQuantity(Dictionary<string, int> loots)
+        {
+            foreach(var lootId in lootsDict.Keys)
+            {
+                if (loots.TryGetValue(lootId, out int quantity))
+                    lootsDict[lootId].SetQuantity(quantity);
+                else
+                    lootsDict[lootId].SetQuantity(0);
+            }
+        }
     }
 }

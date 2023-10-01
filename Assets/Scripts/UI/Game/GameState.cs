@@ -19,5 +19,10 @@ namespace Production.UI
         {
             view.UpdateQuantity(lootId, quantity);
         }
+
+        public void ReloadWarehouseContent(Dictionary<string, int> loots)
+        {
+            view.ReloadAllQuantity(loots);
+        }
     }
 }

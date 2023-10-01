@@ -22,6 +22,7 @@ namespace Production.UI
             loots.AddRange(gameSession.GetLootDescriptions().productsList);
             gameState.InitLootUIs(loots);
             gameSession.OnWarehouseContentChanged += gameState.UpdateWarehouseContent;
+            gameSession.OnWarehouseContentLoaded += gameState.ReloadWarehouseContent;
         }
 
         public void SwitchToMainMenuState()
@@ -51,7 +52,7 @@ namespace Production.UI
                     ShowResourceBuilding(building as ResourceBuilding);
                     break;
                 case BuildingType.Processing:
-                    Debug.Log("Show processing");
+                    ShowProcessingBuilding(building as ProcessingBuilding);
                     break;
                 case BuildingType.Marketplace:
                     Debug.Log("Show marketplace");
@@ -66,6 +67,14 @@ namespace Production.UI
             var resourceState = stateSwitcher.GetState<ResourceState>();
             resourceState.Init(building, gameSession.GetLootDescriptions().resourcesList, SwitchToGameState);
             stateSwitcher.SwitchState(resourceState);
+        }
+
+        private void ShowProcessingBuilding(ProcessingBuilding building)
+        {
+            var processingState = stateSwitcher.GetState<ProcessingState>();
+            LootDescriptions lootDescriptions = gameSession.GetLootDescriptions();
+            processingState.Init(building, lootDescriptions.resourcesList, lootDescriptions.productsList, gameSession.GetConvertations(), SwitchToGameState);
+            stateSwitcher.SwitchState(processingState);
         }
     }
 }

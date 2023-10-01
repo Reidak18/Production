@@ -11,9 +11,7 @@ namespace Production.GameLogic
         [HideInInspector]
         public bool isWorking;
         [HideInInspector]
-        public Resource resource1;
-        [HideInInspector]
-        public Resource resource2;
+        public Resource[] resources = new Resource[2];
         [HideInInspector]
         public Product product;
 
@@ -24,10 +22,9 @@ namespace Production.GameLogic
             isWorking = false;
         }
 
-        public void SetResources(Resource resource1, Resource resource2)
+        public void SetResources(Resource[] resources)
         {
-            this.resource1 = resource1;
-            this.resource2 = resource2;
+            this.resources = resources;
         }
     }
 }

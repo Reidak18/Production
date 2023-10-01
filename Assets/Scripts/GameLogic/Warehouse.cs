@@ -10,6 +10,7 @@ namespace Production.GameLogic
         public Dictionary<string, int> loots = new Dictionary<string, int>();
 
         public event Action<string, int> OnWarehouseContentChanged;
+        public event Action<Dictionary<string, int>> OnWarehouseContentLoaded;
 
         public void Load(LootDescriptions lootDescriptions)
         {
@@ -23,6 +24,8 @@ namespace Production.GameLogic
             {
                 loots.Add(product.id, PlayerPrefs.GetInt(product.id, 0));
             }
+
+            OnWarehouseContentLoaded?.Invoke(loots);
         }
 
         public void Save()
