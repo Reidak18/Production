@@ -15,6 +15,9 @@ namespace Production.GameLogic
         [HideInInspector]
         public Product product { get; private set; }
 
+        // нужно для отслеживания вынужденных остановок из-за нехватки ресурсов
+        public event Action OnWorkingStopped;
+
         public override void Init(BuildingDescription description, Vector3Int coords)
         {
             base.Init(description, coords);
@@ -40,6 +43,7 @@ namespace Production.GameLogic
             isWorking = false;
             resources = new Resource[2];
             product = null;
+            OnWorkingStopped?.Invoke();
         }
 
         public void SetResources(Resource[] resources)

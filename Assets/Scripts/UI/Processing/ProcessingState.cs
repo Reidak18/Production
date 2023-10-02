@@ -16,6 +16,7 @@ namespace Production.UI
         private List<Resource> resourcesList;
         private List<Product> productsList;
         private Convertations convertations;
+        private Func<string, int> GetAvailableQuantity;
         private int[] resourceIndexes = new int[2];
 
         private Action OnClose;
@@ -27,12 +28,14 @@ namespace Production.UI
             view.OnCloseClicked += OnCloseClicked;
         }
 
-        public void Init(ProcessingBuilding building, List<Resource> resourcesList, List<Product> productsList, Convertations convertations, Action OnClose)
+        public void Init(ProcessingBuilding building, List<Resource> resourcesList, List<Product> productsList,
+            Convertations convertations, Func<string, int> GetAvailableQuantity, Action OnClose)
         {
             this.building = building;
             this.resourcesList = resourcesList;
             this.productsList = productsList;
             this.convertations = convertations;
+            this.GetAvailableQuantity = GetAvailableQuantity;
             this.OnClose = OnClose;
 
             view.SetProductTime(building.description.productionTime);
@@ -56,6 +59,8 @@ namespace Production.UI
             }
             view.SetStartButtonEnable(building.isWorking);
             view.UpdateStartButton(building.isWorking);
+
+            building.OnWorkingStopped += OnWorkingStopped;
         }
 
         private void OnChangeClicked(int index)
@@ -75,7 +80,7 @@ namespace Production.UI
             if (!string.IsNullOrEmpty(convertationResultId))
             {
                 view.SetProductImage(productsList.FirstOrDefault(p => p.id == convertationResultId).texture);
-                view.SetStartButtonEnable(true);
+                view.SetStartButtonEnable(CheckResourceEnough());
             }
             else
             {
@@ -121,6 +126,30 @@ namespace Production.UI
         private void OnCloseClicked()
         {
             OnClose?.Invoke();
+        }
+
+        private bool CheckResourceEnough()
+        {
+            foreach (var resourceIndex in resourceIndexes)
+            {
+                if (resourceIndex == -1 || GetAvailableQuantity(resourcesList[resourceIndex].id) <= 0)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private void OnWorkingStopped()
+        {
+            view.UpdateStartButton(false);
+            view.SetStartButtonEnable(CheckResourceEnough());
+        }
+
+        public override void OnStatePreHidden()
+        {
+            base.OnStatePreHidden();
+            building.OnWorkingStopped -= OnWorkingStopped;
         }
     }
 }

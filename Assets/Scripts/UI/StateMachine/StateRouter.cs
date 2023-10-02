@@ -76,7 +76,8 @@ namespace Production.UI
         {
             var processingState = stateSwitcher.GetState<ProcessingState>();
             LootDescriptions lootDescriptions = gameSession.GetLootDescriptions();
-            processingState.Init(building, lootDescriptions.resourcesList, lootDescriptions.productsList, gameSession.GetConvertations(), SwitchToGameState);
+            processingState.Init(building, lootDescriptions.resourcesList, lootDescriptions.productsList,
+                gameSession.GetConvertations(), gameSession.GetWarehouseQuantity, SwitchToGameState);
             stateSwitcher.SwitchState(processingState);
         }
 
