@@ -10,6 +10,8 @@ namespace Production.GameLogic
     public class GameSession : MonoBehaviour
     {
         [SerializeField]
+        private int coinsToWin = 100;
+        [SerializeField]
         private bool clearSavesOnStart;
 
         private const string coinsCountKey = "CoinsCount";
@@ -35,6 +37,7 @@ namespace Production.GameLogic
         public event Action<string, int> OnWarehouseContentChanged;
         public event Action<Dictionary<string, int>> OnWarehouseContentLoaded;
         public event Action<int> OnCoinsCountChanged;
+        public event Action<int> OnVictory;
 
         private void Awake()
         {
@@ -54,6 +57,12 @@ namespace Production.GameLogic
             LoadCoins();
 
             productionController.StartGame(GetFromWarehouse, warehouse.AddToWarehouse);
+        }
+
+        public void FinishGame()
+        {
+            productionController.StopGame();
+            PlayerPrefs.DeleteAll();
         }
 
         public LootDescriptions GetLootDescriptions()
@@ -86,6 +95,11 @@ namespace Production.GameLogic
             GetFromWarehouse(productId, quantity);
             coinsCount += lootDescriptions.productsList.FirstOrDefault(p => p.id == productId).price * quantity;
             OnCoinsCountChanged?.Invoke(coinsCount);
+
+            if (coinsCount >= coinsToWin)
+            {
+                OnVictory?.Invoke(coinsToWin);
+            }
         }
 
         private void OnApplicationFocus(bool focus)

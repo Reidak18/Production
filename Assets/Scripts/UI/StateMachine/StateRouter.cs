@@ -24,6 +24,8 @@ namespace Production.UI
             gameSession.OnWarehouseContentChanged += gameState.UpdateWarehouseContent;
             gameSession.OnWarehouseContentLoaded += gameState.ReloadWarehouseContent;
             gameSession.OnCoinsCountChanged += gameState.UpdateCoinsCount;
+
+            gameSession.OnVictory += SwitchToVictoryState;
         }
 
         public void SwitchToMainMenuState()
@@ -83,6 +85,19 @@ namespace Production.UI
             var marketplaceState = stateSwitcher.GetState<MarketplaceState>();
             marketplaceState.Init(gameSession.GetLootDescriptions().productsList, gameSession.GetWarehouseQuantity, gameSession.SellProduct, SwitchToGameState);
             stateSwitcher.SwitchState(marketplaceState);
+        }
+
+        private void SwitchToVictoryState(int targetCoinsCount)
+        {
+            var victoryState = stateSwitcher.GetState<VictoryState>();
+            victoryState.Init(targetCoinsCount, FinishGame);
+            stateSwitcher.SwitchState(victoryState);
+        }
+
+        private void FinishGame()
+        {
+            gameSession.FinishGame();
+            SwitchToMainMenuState();
         }
     }
 }
