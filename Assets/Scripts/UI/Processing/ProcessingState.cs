@@ -68,15 +68,7 @@ namespace Production.UI
             resourceIndexes[index] = (resourceIndexes[index] + 1) % resourcesList.Count;
             view.SetResourceImage(index, resourcesList[resourceIndexes[index]].texture);
 
-            List<string> resourceList = new List<string>();
-            for (int i = 0; i < resourceIndexes.Length; i++)
-            {
-                if (resourceIndexes[i] != -1)
-                {
-                    resourceList.Add(resourcesList[resourceIndexes[i]].id);
-                }
-            }
-            string convertationResultId = convertations.GetConvertationResult(resourceList.ToArray());
+            string convertationResultId = GetConvertationResult();
             if (!string.IsNullOrEmpty(convertationResultId))
             {
                 view.SetProductImage(productsList.FirstOrDefault(p => p.id == convertationResultId).texture);
@@ -101,18 +93,18 @@ namespace Production.UI
 
         private void StartWorking()
         {
-            List<Resource> resourceList = new List<Resource>();
-            for (int i = 0; i < resourceIndexes.Length; i++)
-            {
-                resourceList.Add(resourcesList[resourceIndexes[i]]);
-            }
-            string targetProductId = convertations.GetConvertationResult(resourceList.Select(r => r.id).ToArray());
+            string targetProductId = GetConvertationResult();
             if (string.IsNullOrEmpty(targetProductId))
             {
                 Debug.LogError("Can't get result product from given resources");
                 return;
             }
             Product targetProduct = productsList.FirstOrDefault(p => p.id == targetProductId);
+            List<Resource> resourceList = new List<Resource>();
+            for (int i = 0; i < resourceIndexes.Length; i++)
+            {
+                resourceList.Add(resourcesList[resourceIndexes[i]]);
+            }
             building.StartWorking(resourceList.ToArray(), targetProduct);
             view.UpdateStartButton(building.isWorking);
         }
@@ -126,6 +118,19 @@ namespace Production.UI
         private void OnCloseClicked()
         {
             OnClose?.Invoke();
+        }
+
+        private string GetConvertationResult()
+        {
+            List<string> resourceList = new List<string>();
+            for (int i = 0; i < resourceIndexes.Length; i++)
+            {
+                if (resourceIndexes[i] != -1)
+                {
+                    resourceList.Add(resourcesList[resourceIndexes[i]].id);
+                }
+            }
+            return convertations.GetConvertationResult(resourceList.ToArray());
         }
 
         private bool CheckResourceEnough()
@@ -143,7 +148,7 @@ namespace Production.UI
         private void OnWorkingStopped()
         {
             view.UpdateStartButton(false);
-            view.SetStartButtonEnable(CheckResourceEnough());
+            view.SetStartButtonEnable(!string.IsNullOrEmpty(GetConvertationResult()) && CheckResourceEnough());
         }
 
         public override void OnStatePreHidden()
