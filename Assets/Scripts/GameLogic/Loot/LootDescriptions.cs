@@ -9,7 +9,6 @@ namespace Production.GameLogic
     public class Loot
     {
         public string id;
-        public string readableName;
         public Texture2D texture;
     }
 
