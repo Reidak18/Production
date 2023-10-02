@@ -15,6 +15,8 @@ namespace Production.GameLogic
         public BuildingType type;
         public BuildingDescription description;
 
+        public abstract void StopWorking();
+
         public virtual void Init(BuildingDescription description, Vector3Int coords)
         {
             this.description = description;

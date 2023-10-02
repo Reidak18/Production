@@ -96,27 +96,26 @@ namespace Production.UI
 
         private void StartWorking()
         {
-            building.isWorking = true;
-            view.UpdateStartButton(true);
-            List<string> resourceList = new List<string>();
+            List<Resource> resourceList = new List<Resource>();
             for (int i = 0; i < resourceIndexes.Length; i++)
             {
-                building.resources[i] = resourcesList[resourceIndexes[i]];
-                resourceList.Add(building.resources[i].id);
+                resourceList.Add(resourcesList[resourceIndexes[i]]);
             }
-            string productId = convertations.GetConvertationResult(resourceList.ToArray());
-            building.product = productsList.FirstOrDefault(p => p.id == productId);
+            string targetProductId = convertations.GetConvertationResult(resourceList.Select(r => r.id).ToArray());
+            if (string.IsNullOrEmpty(targetProductId))
+            {
+                Debug.LogError("Can't get result product from given resources");
+                return;
+            }
+            Product targetProduct = productsList.FirstOrDefault(p => p.id == targetProductId);
+            building.StartWorking(resourceList.ToArray(), targetProduct);
+            view.UpdateStartButton(building.isWorking);
         }
 
         private void StopWorking()
         {
-            building.isWorking = false;
-            view.UpdateStartButton(false);
-            for (int i = 0; i < resourceIndexes.Length; i++)
-            {
-                building.resources[i] = null;
-            }
-            building.product = null;
+            building.StopWorking();
+            view.UpdateStartButton(building.isWorking);
         }
 
         private void OnCloseClicked()

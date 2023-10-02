@@ -64,16 +64,14 @@ namespace Production.UI
 
         private void StartWorking()
         {
-            building.isWorking = true;
-            view.UpdateStartButton(true);
-            building.resource = resourcesList[resourceIndex];
+            building.StartWorking(resourcesList[resourceIndex]);
+            view.UpdateStartButton(building.isWorking);
         }
 
         private void StopWorking()
         {
-            building.isWorking = false;
-            view.UpdateStartButton(false);
-            building.resource = null;
+            building.StopWorking();
+            view.UpdateStartButton(building.isWorking);
         }
 
         private void OnCloseClicked()

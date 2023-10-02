@@ -54,6 +54,16 @@ namespace Production.GameLogic
         public void StopGame()
         {
             gameIsStarted = false;
+            foreach (var resourceBuilding in resourceBuildings.Keys.ToArray())
+            {
+                resourceBuilding.StopWorking();
+                resourceBuildings[resourceBuilding] = -1;
+            }
+            foreach (var processingBuilding in processingBuildings.Keys.ToArray())
+            {
+                processingBuilding.StopWorking();
+                processingBuildings[processingBuilding] = -1;
+            }
         }
 
         private void FixedUpdate()
@@ -63,10 +73,13 @@ namespace Production.GameLogic
 
             gameTime += Time.fixedDeltaTime;
 
-            foreach(var build in resourceBuildings.Keys.ToList())
+            foreach(var build in resourceBuildings.Keys.ToArray())
             {
                 if (!build.isWorking)
+                {
+                    resourceBuildings[build] = -1;
                     continue;
+                }
 
                 if (resourceBuildings[build] < 0)
                 {
@@ -81,10 +94,13 @@ namespace Production.GameLogic
                 }
             }
 
-            foreach (var build in processingBuildings.Keys.ToList())
+            foreach (var build in processingBuildings.Keys.ToArray())
             {
                 if (!build.isWorking)
+                {
+                    processingBuildings[build] = -1;
                     continue;
+                }
 
                 Dictionary<string, int> requiredResources = new Dictionary<string, int>()
                 {
@@ -94,20 +110,20 @@ namespace Production.GameLogic
 
                 if (processingBuildings[build] < 0)
                 {
-                    if (getFromProvider.Invoke(requiredResources))
+                    if (getFromProvider(requiredResources))
                         processingBuildings[build] = gameTime;
                     else
-                        build.isWorking = false;
+                        build.StopWorking();
                     continue;
                 }
 
                 if (gameTime - processingBuildings[build] >= build.description.productionTime)
                 {
                     sendToConsumer.Invoke(build.product.id, 1);
-                    if (getFromProvider.Invoke(requiredResources))
+                    if (getFromProvider(requiredResources))
                         processingBuildings[build] = gameTime;
                     else
-                        build.isWorking = false;
+                        build.StopWorking();
                 }
             }
         }

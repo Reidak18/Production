@@ -7,13 +7,15 @@ namespace Production.GameLogic
 {
     public class MarketplaceBuilding : Building
     {
-        [HideInInspector]
-        public Product product;
-
         public override void Init(BuildingDescription description, Vector3Int coords)
         {
             base.Init(description, coords);
             type = BuildingType.Marketplace;
+        }
+
+        public override void StopWorking()
+        {
+
         }
     }
 }
