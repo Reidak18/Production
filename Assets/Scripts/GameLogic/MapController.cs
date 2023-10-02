@@ -58,7 +58,7 @@ namespace Production.GameLogic
         {
             if (Input.GetMouseButtonDown(0))
             {
-                if (!EventSystem.current.IsPointerOverGameObject())
+                if (!IsPointerOverGameObject())
                 {
                     Vector3 clickWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                     clickWorldPos.z = 0;
@@ -69,6 +69,20 @@ namespace Production.GameLogic
                     }
                 }
             }
+        }
+
+		private bool IsPointerOverGameObject()
+        {
+            if (EventSystem.current.IsPointerOverGameObject())
+                return true;
+
+            if (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Began)
+            {
+                if (EventSystem.current.IsPointerOverGameObject(Input.touches[0].fingerId))
+                    return true;
+            }
+
+            return false;
         }
     }
 }

@@ -102,9 +102,9 @@ namespace Production.GameLogic
             }
         }
 
-        private void OnApplicationFocus(bool focus)
+        private void OnApplicationPause(bool pause)
         {
-            if (!focus)
+            if (pause)
             {
                 warehouse.Save();
                 SaveCoins();
