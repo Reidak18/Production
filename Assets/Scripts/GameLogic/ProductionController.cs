@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace Production.GameLogic
 {
+    // вынес в отдельный класс, чтобы обрабатывать добавление / забор ресурсов в одном месте
     public class ProductionController : MonoBehaviour
     {
         private bool gameIsStarted = false;
