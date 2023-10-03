@@ -17,6 +17,6 @@ MonoBehaviour:
   - productionTime: 2
   - productionTime: 1
   processingBuildingsList:
-  - productionTime: 4
+  - productionTime: 2
   marketplaceBuildingsList:
   - productionTime: 0
