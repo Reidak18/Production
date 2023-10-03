@@ -13,7 +13,7 @@ namespace Production.GameLogic
         public string productId;
     }
 
-    [CreateAssetMenu(fileName = "ConvertationRules", menuName = "Convertation rules")]
+    [CreateAssetMenu(fileName = "ConvertationRules", menuName = "Production/Convertation rules")]
     public class Convertations : ScriptableObject
     {
         public List<Convertation> convertationList;

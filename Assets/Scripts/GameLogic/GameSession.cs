@@ -10,7 +10,7 @@ namespace Production.GameLogic
     public class GameSession : MonoBehaviour
     {
         [SerializeField]
-        private int coinsToWin = 100;
+        private GameSettings gameSettings;
         [SerializeField]
         private bool clearSavesOnStart;
 
@@ -96,9 +96,9 @@ namespace Production.GameLogic
             coinsCount += lootDescriptions.productsList.FirstOrDefault(p => p.id == productId).price * quantity;
             OnCoinsCountChanged?.Invoke(coinsCount);
 
-            if (coinsCount >= coinsToWin)
+            if (coinsCount >= gameSettings.coinsToWin)
             {
-                OnVictory?.Invoke(coinsToWin);
+                OnVictory?.Invoke(gameSettings.coinsToWin);
             }
         }
 

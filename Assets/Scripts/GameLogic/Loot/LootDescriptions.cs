@@ -24,7 +24,7 @@ namespace Production.GameLogic
         public int price;
     }
 
-    [CreateAssetMenu(fileName = "LootDescriptions", menuName = "Loot descriptions")]
+    [CreateAssetMenu(fileName = "LootDescriptions", menuName = "Production/Loot descriptions")]
     public class LootDescriptions : ScriptableObject
     {
         public List<Resource> resourcesList;

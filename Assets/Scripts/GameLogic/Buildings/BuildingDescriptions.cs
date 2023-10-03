@@ -11,7 +11,7 @@ namespace Production.GameLogic
         public float productionTime;
     }
 
-    [CreateAssetMenu(fileName = "BuildingDescriptions", menuName = "Building descriptions")]
+    [CreateAssetMenu(fileName = "BuildingDescriptions", menuName = "Production/Building descriptions")]
     public class BuildingDescriptions : ScriptableObject
     {
         [SerializeField]

@@ -1175,7 +1175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bb471915918848faafb67b902c61136, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coinsToWin: 100
+  gameSettings: {fileID: 11400000, guid: bef5926baf3ce446fb8bf09cc2007818, type: 2}
   clearSavesOnStart: 0
   tilemap: {fileID: 4981031069698907889, guid: 8076f36bd6fee4e878f5ca24a89b3098, type: 3}
   buildingFactory: {fileID: 614953795}
