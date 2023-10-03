@@ -109,6 +109,8 @@ namespace Production.GameLogic
                     { build.resources[1].id, 1 }
                 };
 
+                // ресурсы списываются сразу при запуске производства; готовый товар выдается через productionTime секунд
+                // при остановке работы задействованные ресурсы не возвращаются
                 if (processingBuildings[build] < 0)
                 {
                     if (getFromProvider(requiredResources))
@@ -121,6 +123,7 @@ namespace Production.GameLogic
                 if (gameTime - processingBuildings[build] >= build.description.productionTime)
                 {
                     sendToConsumer.Invoke(build.product.id, 1);
+                    // если после выдачи готового товара на складе хватает ресурсов на изготовление нового - сразу берем их в работу
                     if (getFromProvider(requiredResources))
                         processingBuildings[build] = gameTime;
                     else

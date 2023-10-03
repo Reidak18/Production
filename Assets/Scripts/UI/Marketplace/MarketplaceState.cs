@@ -38,6 +38,7 @@ namespace Production.UI
             view.SetSellButtonEnable(false);
         }
 
+        // перебираются только те продукты, которые есть на складе
         private void OnChangeClicked()
         {
             productIndex = productIndex == -1 ? 0 : productIndex;
@@ -56,6 +57,7 @@ namespace Production.UI
             } while (productIndex != productIndexOld);
         }
 
+        // продажа по одному
         private void OnCellClicked()
         {
             OnSell?.Invoke(productsList[productIndex].id, 1);

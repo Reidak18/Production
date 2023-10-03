@@ -63,6 +63,9 @@ namespace Production.UI
             building.OnWorkingStopped += OnWorkingStopped;
         }
 
+        // пользователь может просматривать комбинации различных ресурсов; в случае когда из них можно получить
+        // готовый продукт он отобразится в окне результата
+        // кнопка запуска доступна только если комбинация ресурсов дает готовый продукт и требуемые ресурсы есть на складе
         private void OnChangeClicked(int index)
         {
             resourceIndexes[index] = (resourceIndexes[index] + 1) % resourcesList.Count;
