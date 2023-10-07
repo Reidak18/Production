@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 namespace Production.GameLogic
 {
@@ -94,20 +92,12 @@ namespace Production.GameLogic
         {
             GetFromWarehouse(productId, quantity);
             coinsCount += lootDescriptions.productsList.FirstOrDefault(p => p.id == productId).price * quantity;
+            SaveCoins();
             OnCoinsCountChanged?.Invoke(coinsCount);
 
             if (coinsCount >= gameSettings.coinsToWin)
             {
                 OnVictory?.Invoke(gameSettings.coinsToWin);
-            }
-        }
-
-        private void OnApplicationPause(bool pause)
-        {
-            if (pause)
-            {
-                warehouse.Save();
-                SaveCoins();
             }
         }
 

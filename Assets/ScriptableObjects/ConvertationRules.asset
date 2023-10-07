@@ -18,22 +18,10 @@ MonoBehaviour:
     - Stone
     productId: Hammer
   - resourceIds:
-    - Stone
-    - Wood
-    productId: Hammer
-  - resourceIds:
     - Wood
     - Iron
     productId: Pitchfork
   - resourceIds:
-    - Iron
-    - Wood
-    productId: Pitchfork
-  - resourceIds:
     - Stone
     - Iron
-    productId: Boer
-  - resourceIds:
-    - Iron
-    - Stone
     productId: Boer

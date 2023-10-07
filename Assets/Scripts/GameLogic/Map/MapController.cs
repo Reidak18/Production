@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -24,11 +23,11 @@ namespace Production.GameLogic
                 Vector3Int localPlace = new Vector3Int(pos.x, pos.y, pos.z);
                 if (buildingsTilemap.HasTile(localPlace))
                 {
-                    TileBase tile = buildingsTilemap.GetTile(localPlace);
+                    BuildingTile tile = buildingsTilemap.GetTile(localPlace) as BuildingTile;
                     Vector3Int coords = new Vector3Int(pos.x, pos.y, pos.z);
-                    switch (tile.name)
+                    switch (tile.buildingType)
                     {
-                        case "Resource":
+                        case BuildingType.Resource:
                             if (resourceCurrentCount < resourceBuildCount)
                             {
                                 buildings.Add(coords, factory.CreateResourceBuilding(resourceCurrentCount, coords));
@@ -39,10 +38,10 @@ namespace Production.GameLogic
                                 buildingsTilemap.SetTile(new Vector3Int(pos.x, pos.y, pos.z), null);
                             }
                             break;
-                        case "Processing":
+                        case BuildingType.Processing:
                             buildings.Add(new Vector3Int(pos.x, pos.y, pos.z), factory.CreateProcessingBuilding(0, coords));
                             break;
-                        case "Marketplace":
+                        case BuildingType.Marketplace:
                             buildings.Add(new Vector3Int(pos.x, pos.y, pos.z), factory.CreateMarketplaceBuilding(0, coords));
                             break;
                         default:

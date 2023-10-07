@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Production.GameLogic
@@ -22,7 +20,7 @@ namespace Production.GameLogic
         {
             foreach(var convertation in convertationList)
             {
-                if (Enumerable.SequenceEqual(convertation.resourceIds, resourceIds))
+                if (new HashSet<string>(convertation.resourceIds).SetEquals(resourceIds))
                 {
                     return convertation.productId;
                 }

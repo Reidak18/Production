@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -28,14 +27,6 @@ namespace Production.GameLogic
             OnWarehouseContentLoaded?.Invoke(loots);
         }
 
-        public void Save()
-        {
-            foreach (var lootId in loots.Keys)
-            {
-                PlayerPrefs.SetInt(lootId, loots[lootId]);
-            }
-        }
-
         public bool GetFromWarehouse(string lootId, int required)
         {
             if (!loots.TryGetValue(lootId, out int quantity))
@@ -45,6 +36,7 @@ namespace Production.GameLogic
                 return false;
 
             loots[lootId] -= required;
+            SaveLootChanges(lootId, loots[lootId]);
             OnWarehouseContentChanged?.Invoke(lootId, loots[lootId]);
             return true;
         }
@@ -63,6 +55,7 @@ namespace Production.GameLogic
             foreach (var lootId in required.Keys)
             {
                 loots[lootId] -= required[lootId];
+                SaveLootChanges(lootId, loots[lootId]);
                 OnWarehouseContentChanged?.Invoke(lootId, loots[lootId]);
             }
 
@@ -79,6 +72,7 @@ namespace Production.GameLogic
             {
                 loots[lootId] += quantity;
             }
+            SaveLootChanges(lootId, loots[lootId]);
             OnWarehouseContentChanged?.Invoke(lootId, loots[lootId]);
         }
 
@@ -88,6 +82,11 @@ namespace Production.GameLogic
                 return loots[lootId];
 
             return 0;
+        }
+
+        private void SaveLootChanges(string lootId, int quantity)
+        {
+            PlayerPrefs.GetInt(lootId, quantity);
         }
     }
 }
